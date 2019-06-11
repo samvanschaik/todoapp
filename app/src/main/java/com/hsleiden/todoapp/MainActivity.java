@@ -15,10 +15,13 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Serializable {
+    private static final int SECOND_ACTIVITY_REQUEST_CODE = 0;
+
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -38,20 +41,11 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-
-                startActivity(intent);
+                startActivityForResult(intent, SECOND_ACTIVITY_REQUEST_CODE);
             }
         });
 
-        Task t = new Task(0,
-                "Test Task0",
-                new Date(2000, 1, 1),
-                1);
-
-        tasks.add(t);
-
+        System.out.println(getIntent().getSerializableExtra("Task"));
     }
 
     @Override
@@ -75,4 +69,26 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SECOND_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                String taskName = data.getStringExtra("taskName");
+                int taskDateYear= data.getIntExtra("taskDateYear", 0);
+                int taskDateMonth = data.getIntExtra("taskDateMonth", 0 );
+                int taskDateDay = data.getIntExtra("taskDateDay", 0 );
+                int taskPriority = data.getIntExtra("taskPriority", 0);
+
+                Date taskDate = new Date(taskDateYear, taskDateMonth, taskDateDay);
+                Task newTask = new Task(taskName, taskDate, taskPriority);
+                tasks.add(newTask);
+                System.out.println(tasks.get(0).getTaskName());
+                System.out.println(tasks.get(0).getTaskPriority());
+            }
+        }
+    }
+
 }

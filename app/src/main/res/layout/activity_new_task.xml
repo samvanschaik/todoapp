@@ -18,13 +18,13 @@
             android:text="What do you want to do?" />
 
         <EditText
-            android:id="@+id/TaskNameField"
+            android:id="@+id/taskNameField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Task name   "/>
 
         <DatePicker
-            android:id="@+id/TaskDatePicker"
+            android:id="@+id/taskDatePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:datePickerMode="spinner"
@@ -33,7 +33,7 @@
         </DatePicker>
 
         <TextView
-            android:id="@+id/TaskPriorityText"
+            android:id="@+id/taskPriorityText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Give your task a priority."/>
