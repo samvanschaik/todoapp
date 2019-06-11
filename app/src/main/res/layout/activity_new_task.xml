@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewTaskActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/taskNameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="What do you want to do?" />
+
+        <EditText
+            android:id="@+id/TaskNameField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Task name   "/>
+
+        <DatePicker
+            android:id="@+id/TaskDatePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:datePickerMode="spinner"
+            android:calendarViewShown="false"
+            android:spinnersShown="true">
+        </DatePicker>
+
+        <TextView
+            android:id="@+id/TaskPriorityText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Give your task a priority."/>
+
+        <NumberPicker
+            android:id="@+id/taskNumberPicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </NumberPicker>
+
+        <Button
+            android:id="@+id/taskCreateButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ADD YOUR TASK"/>
+
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
