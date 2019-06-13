@@ -15,14 +15,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentLeft="true"
+            style="@style/TextAppearance.AppCompat.Headline"/>
 
         <TextView
             android:id="@+id/taskPriority"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            style="@style/TextAppearance.AppCompat.Headline"
+            />
     </RelativeLayout>
 
     <LinearLayout
@@ -34,7 +37,7 @@
             android:id="@+id/taskDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="8sp"
+            style="@style/TextAppearance.AppCompat.Caption"
             />
 
     </LinearLayout>
