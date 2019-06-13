@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
 
         final Intent intent = new Intent(this, NewTaskActivity.class);
 
+        //------
+        // Floating Action Button Creation and onClick handling.
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,11 +45,14 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
             }
         });
 
+        // todo create a little example of a task for users.
         Task testTask = new Task("testTast1",
                 new Date(2000, 1, 1),
                 1);
         tasks.add(testTask);
-        // set up the RecyclerView
+
+        // ------
+        // Recycler view Creation
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new TaskRecyclerViewAdapter(this, tasks);
@@ -94,11 +99,10 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
                 int taskDateDay = data.getIntExtra("taskDateDay", 0 );
                 int taskPriority = data.getIntExtra("taskPriority", 0);
 
+                // todo clean this bit up a lil'
                 Date taskDate = new Date(taskDateYear, taskDateMonth, taskDateDay);
                 Task newTask = new Task(taskName, taskDate, taskPriority);
                 tasks.add(newTask);
-                System.out.println(tasks.get(0).getTaskName());
-                System.out.println(tasks.get(0).getTaskPriority());
                 adapter.notifyDataSetChanged();
             }
         }

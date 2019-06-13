@@ -35,18 +35,22 @@ public class NewTaskActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Task newTask = new Task(taskName.getText().toString(),
-                        new Date(taskDate.getYear(), taskDate.getMonth(), taskDate.getDayOfMonth()),
-                        taskPriority.getValue());
+                if(taskName.getText().length() == 0){
+                    taskName.setError("Your task needs a name!");
+                } else {
+                    Task newTask = new Task(taskName.getText().toString(),
+                            new Date(taskDate.getYear(), taskDate.getMonth(), taskDate.getDayOfMonth()),
+                            taskPriority.getValue());
 
-                intent.putExtra("taskName", taskName.getText().toString());
-                intent.putExtra("taskDateYear", taskDate.getYear());
-                intent.putExtra("taskDateMonth", taskDate.getMonth());
-                intent.putExtra("taskDateDay", taskDate.getDayOfMonth());
-                intent.putExtra("taskPriority", taskPriority.getValue());
+                    intent.putExtra("taskName", taskName.getText().toString());
+                    intent.putExtra("taskDateYear", taskDate.getYear());
+                    intent.putExtra("taskDateMonth", taskDate.getMonth());
+                    intent.putExtra("taskDateDay", taskDate.getDayOfMonth());
+                    intent.putExtra("taskPriority", taskPriority.getValue());
 
-                setResult(RESULT_OK, intent);
-                finish();
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
             }
         });
     }
