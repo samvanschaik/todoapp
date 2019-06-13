@@ -9,49 +9,72 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-16dp">
 
         <TextView
             android:id="@+id/taskNameText"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/what_do_you_want_to_do" />
 
         <EditText
             android:id="@+id/taskNameField"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/task_name"/>
+            android:layout_gravity="center"
+            android:focusedByDefault="true"
+            android:hint="@string/task_name"
+            android:importantForAutofill="no"
+            android:inputType="text" />
+
+        <View style="@style/Divider"></View>
+
+        <TextView
+            android:id="@+id/taskDateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="@string/what_is_your_deadline" />/>
 
         <DatePicker
             android:id="@+id/taskDatePicker"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:datePickerMode="spinner"
+            android:layout_gravity="center"
             android:calendarViewShown="false"
-            android:spinnersShown="true">
-        </DatePicker>
+            android:datePickerMode="spinner"
+            android:spinnersShown="true"></DatePicker>
+
+        <View style="@style/Divider" />
 
         <TextView
             android:id="@+id/taskPriorityText"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/give_your_task_a_priority"/>
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="@string/give_your_task_a_priority" />
 
         <NumberPicker
             android:id="@+id/taskNumberPicker"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </NumberPicker>
-
-        <Button
-            android:id="@+id/taskCreateButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/add_your_task"
-            android:background="@color/colorSecondaryOrange"/>
+            android:layout_height="wrap_content"></NumberPicker>
 
 
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/taskCreateButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_your_task"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorSecondaryOrange"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

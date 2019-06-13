@@ -9,7 +9,8 @@
 
     <!-- New Task Activity Strings-->
     <string name="task_name">Task name</string>
-    <string name="what_do_you_want_to_do">What do you want to do?</string>
+    <string name="what_do_you_want_to_do">What do you want to do?  </string>
     <string name="give_your_task_a_priority">Give your task a priority.</string>
     <string name="add_your_task">ADD YOUR TASK</string>
+    <string name="what_is_your_deadline">What is your deadline?</string>
 </resources>
