@@ -7,6 +7,7 @@ import com.hsleiden.todoapp.model.Task;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,17 +47,29 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         });
 
         // todo create a little example of a task for users.
-        Task testTask = new Task("testTast1",
+        Task testTask = new Task("Test Task 1",
                 new Date(2000, 1, 1),
                 1);
+
+
+        Task testTask2 = new Task("Test Task 2",
+                new Date(2000, 1, 1),
+                1);
+
         tasks.add(testTask);
+        tasks.add(testTask2);
+
 
         // ------
         // Recycler view Creation
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
         adapter = new TaskRecyclerViewAdapter(this, tasks);
         adapter.setClickListener(this);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                layoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(adapter);
     }
 
