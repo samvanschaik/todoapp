@@ -43,18 +43,14 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
             }
         });
 
-        // data to populate the RecyclerView with
-        ArrayList<String> animalNames = new ArrayList<>();
-        animalNames.add("Horse");
-        animalNames.add("Cow");
-        animalNames.add("Camel");
-        animalNames.add("Sheep");
-        animalNames.add("Goat");
-
+        Task testTask = new Task("testTast1",
+                new Date(2000, 1, 1),
+                1);
+        tasks.add(testTask);
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new TaskRecyclerViewAdapter(this, animalNames);
+        adapter = new TaskRecyclerViewAdapter(this, tasks);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
     }
@@ -103,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
                 tasks.add(newTask);
                 System.out.println(tasks.get(0).getTaskName());
                 System.out.println(tasks.get(0).getTaskPriority());
+                adapter.notifyDataSetChanged();
             }
         }
     }

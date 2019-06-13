@@ -8,16 +8,19 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hsleiden.todoapp.model.Task;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerViewAdapter.ViewHolder> {
 
-    private List<String> mData;
+    private ArrayList<Task> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    TaskRecyclerViewAdapter(Context context, List<String> data) {
+    TaskRecyclerViewAdapter(Context context, ArrayList<Task> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
@@ -32,8 +35,8 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String animal = mData.get(position);
-        holder.myTextView.setText(animal);
+        Task task = mData.get(position);
+        holder.myTextView.setText(task.getTaskName());
     }
 
     // total number of rows
@@ -60,7 +63,7 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
     }
 
     // convenience method for getting data at click position
-    String getItem(int id) {
+    Task getItem(int id) {
         return mData.get(id);
     }
 
