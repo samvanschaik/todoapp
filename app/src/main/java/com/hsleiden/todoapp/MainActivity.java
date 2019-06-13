@@ -40,23 +40,19 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
 
         final Intent intent = new Intent(this, NewTaskActivity.class);
 
-
-
-
-
         // todo create a little example of a task for users.
         Task testTask = new Task("Test Task 1",
                 new Date(2000, 1, 1),
-                1);
+                5);
 
 
         Task testTask2 = new Task("Test Task 2",
                 new Date(2001, 1, 1),
-                1);
+                3);
 
         Task testTask3 = new Task("Test Task 3",
                 new Date(2002, 1, 1),
-                1);
+                7);
 
         tasks.add(testTask);
         tasks.add(testTask2);
@@ -90,7 +86,29 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         fabSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                switch (sortedState) {
+                    // Todo fix string resources.
+                    case 0:
+                        tasks.sort(Comparator.comparing(Task::getTaskPriority));
+                        adapter.notifyDataSetChanged();
+                        Toast.makeText(getApplicationContext(), "Tasks are now sorted by priority.", Toast.LENGTH_LONG).show();
+                        sortedState = 2;
+                        break;
 
+                    case 1:
+                        tasks.sort(Comparator.comparing(Task::getTaskPriority));
+                        Toast.makeText(getApplicationContext(), "Tasks are now sorted by priority.", Toast.LENGTH_LONG).show();
+                        sortedState = 2;
+                        adapter.notifyDataSetChanged();
+                        break;
+
+                    case 2:
+                        tasks.sort(Comparator.comparing(Task::getTaskDate));
+                        Toast.makeText(getApplicationContext(), "Tasks are now sorted by date.", Toast.LENGTH_LONG).show();
+                        sortedState = 1;
+                        adapter.notifyDataSetChanged();
+                        break;
+                }
             }
         });
     }
