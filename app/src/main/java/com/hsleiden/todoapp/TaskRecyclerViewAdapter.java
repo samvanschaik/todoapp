@@ -33,7 +33,13 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Task task = mData.get(position);
-        holder.myTextView.setText(task.getTaskName());
+        holder.taskNameView.setText(task.getTaskName());
+        holder.taskPriorityView.setText(String.valueOf(task.getTaskPriority()));
+
+        String date = String.valueOf(task.getTaskDate().getDay()) + "/"
+                + String.valueOf(task.getTaskDate().getMonth()) + "/"
+                + String.valueOf(task.getTaskDate().getYear());
+        holder.taskDateView.setText(date);
     }
 
     @Override
@@ -43,11 +49,15 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
 
     // Recycles views when off screen.
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView myTextView;
+        TextView taskNameView;
+        TextView taskDateView;
+        TextView taskPriorityView;
 
         ViewHolder(View itemView) {
             super(itemView);
-            myTextView = itemView.findViewById(R.id.taskName);
+            taskNameView = itemView.findViewById(R.id.taskName);
+            taskDateView = itemView.findViewById(R.id.taskDate);
+            taskPriorityView = itemView.findViewById(R.id.taskPriority);
             itemView.setOnClickListener(this);
         }
 
