@@ -58,8 +58,18 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         tasks.add(testTask2);
         tasks.add(testTask3);
 
+        // todo Could implement a user setting for default sorting
+        // Sort tasks on start up
+        if(sortedState == 0){
+            tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
+            adapter.notifyDataSetChanged();
+            Toast.makeText(getApplicationContext(), "Tasks are now sorted by priority.", Toast.LENGTH_LONG).show();
+            sortedState = 2;
+        }
+
         // ------
         // Recycler view Creation
+
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -89,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
                 switch (sortedState) {
                     // Todo fix string resources.
                     case 0:
-                        tasks.sort(Comparator.comparing(Task::getTaskPriority));
+                        tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
                         adapter.notifyDataSetChanged();
                         Toast.makeText(getApplicationContext(), "Tasks are now sorted by priority.", Toast.LENGTH_LONG).show();
                         sortedState = 2;
