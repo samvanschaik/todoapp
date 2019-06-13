@@ -94,20 +94,20 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
                     case 0:
                         tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
                         adapter.notifyDataSetChanged();
-                        Toast.makeText(getApplicationContext(), "Tasks are now sorted by priority.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_LONG).show();
                         sortedState = 2;
                         break;
 
                     case 1:
                         tasks.sort(Comparator.comparing(Task::getTaskPriority));
-                        Toast.makeText(getApplicationContext(), "Tasks are now sorted by priority.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_LONG).show();
                         sortedState = 2;
                         adapter.notifyDataSetChanged();
                         break;
 
                     case 2:
                         tasks.sort(Comparator.comparing(Task::getTaskDate));
-                        Toast.makeText(getApplicationContext(), "Tasks are now sorted by date.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.sorted_date), Toast.LENGTH_LONG).show();
                         sortedState = 1;
                         adapter.notifyDataSetChanged();
                         break;
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         if(sortedState == 0){
             tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
             adapter.notifyDataSetChanged();
-            Toast.makeText(getApplicationContext(), "Tasks are now sorted by priority.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.sorted_date), Toast.LENGTH_LONG).show();
             sortedState = 2;
         }
     }
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
     edit the task, and a seperate button for completing it should be added. */
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(this, "Deleted task: " + adapter.getItem(position).getTaskName(), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.deleted_task) + adapter.getItem(position).getTaskName(), Toast.LENGTH_LONG).show();
         tasks.remove(position);
         adapter.notifyDataSetChanged();
     }

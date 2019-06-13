@@ -1,4 +1,15 @@
 <resources>
-    <string name="app_name">ToDoApp</string>
+    <string name="app_name">LifeOrder</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Main Activity Strings-->
+    <string name="sorted_priority">Tasks are now sorted by priority.</string>
+    <string name="sorted_date">"Tasks are now sorted by date."</string>
+    <string name="deleted_task">"Deleted task: "</string>
+
+    <!-- New Task Activity Strings-->
+    <string name="task_name">Task name</string>
+    <string name="what_do_you_want_to_do">What do you want to do?</string>
+    <string name="give_your_task_a_priority">Give your task a priority.</string>
+    <string name="add_your_task">ADD YOUR TASK</string>
 </resources>
