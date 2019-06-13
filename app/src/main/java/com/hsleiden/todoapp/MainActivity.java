@@ -58,18 +58,11 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         tasks.add(testTask2);
         tasks.add(testTask3);
 
-        // todo Could implement a user setting for default sorting
-        // Sort tasks on start up
-        if(sortedState == 0){
-            tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
-            adapter.notifyDataSetChanged();
-            Toast.makeText(getApplicationContext(), "Tasks are now sorted by priority.", Toast.LENGTH_LONG).show();
-            sortedState = 2;
-        }
+
+
 
         // ------
         // Recycler view Creation
-
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -121,11 +114,24 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
                 }
             }
         });
+
+        // todo Could implement a user setting for default sorting
+        // Sort tasks on start up
+        if(sortedState == 0){
+            tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
+            adapter.notifyDataSetChanged();
+            Toast.makeText(getApplicationContext(), "Tasks are now sorted by priority.", Toast.LENGTH_LONG).show();
+            sortedState = 2;
+        }
     }
 
+    /* Todo, temporarily this method deletes a task on click. On click should later
+    edit the task, and a seperate button for completing it should be added. */
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Deleted task: " + adapter.getItem(position).getTaskName(), Toast.LENGTH_LONG).show();
+        tasks.remove(position);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
