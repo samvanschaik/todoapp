@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hsleiden.todoapp.model.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerViewAdapter.ViewHolder> {
 

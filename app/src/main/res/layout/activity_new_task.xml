@@ -48,7 +48,8 @@
             android:id="@+id/taskCreateButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ADD YOUR TASK"/>
+            android:text="ADD YOUR TASK"
+            android:background="@color/colorSecondaryOrange"/>
 
 
 

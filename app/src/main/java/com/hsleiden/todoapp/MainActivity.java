@@ -18,13 +18,17 @@ import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements TaskRecyclerViewAdapter.ItemClickListener, Serializable  {
     private static final int SECOND_ACTIVITY_REQUEST_CODE = 0;
 
     TaskRecyclerViewAdapter adapter;
 
+    //todo can probably make sortedstate less verbose
+    private int sortedState = 0; // 0 implies unsorted, 1 implies sorted by date, 2 by priority
     private ArrayList<Task> tasks = new ArrayList<>();
 
     @Override
@@ -36,15 +40,9 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
 
         final Intent intent = new Intent(this, NewTaskActivity.class);
 
-        //------
-        // Floating Action Button Creation and onClick handling.
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(intent, SECOND_ACTIVITY_REQUEST_CODE);
-            }
-        });
+
+
+
 
         // todo create a little example of a task for users.
         Task testTask = new Task("Test Task 1",
@@ -53,12 +51,16 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
 
 
         Task testTask2 = new Task("Test Task 2",
-                new Date(2000, 1, 1),
+                new Date(2001, 1, 1),
+                1);
+
+        Task testTask3 = new Task("Test Task 3",
+                new Date(2002, 1, 1),
                 1);
 
         tasks.add(testTask);
         tasks.add(testTask2);
-
+        tasks.add(testTask3);
 
         // ------
         // Recycler view Creation
@@ -71,6 +73,26 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
                 layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(adapter);
+
+        //------
+        // Floating Action Button Add Creation and onClick handling.
+        FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(intent, SECOND_ACTIVITY_REQUEST_CODE);
+            }
+        });
+
+        //------
+        // Floating Action Button Sort Creation and onClick handling.
+        FloatingActionButton fabSort = findViewById(R.id.fabSort);
+        fabSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override
