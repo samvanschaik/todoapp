@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "423130107630",
+    "firebase_url": "https://lifeorder-f0ca8.firebaseio.com",
+    "project_id": "lifeorder-f0ca8",
+    "storage_bucket": "lifeorder-f0ca8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:423130107630:android:f1921143f70fc161",
+        "android_client_info": {
+          "package_name": "com.hsleiden.todoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "423130107630-idfoe5embt0kkpp1jfh8unr79m9j2scv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkDgkbxAOBpA_DaEikfMFpfe01AW-E_SE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "423130107630-idfoe5embt0kkpp1jfh8unr79m9j2scv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
