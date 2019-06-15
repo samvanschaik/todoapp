@@ -15,6 +15,8 @@ public class Task implements Serializable {
         this.taskPriority = taskPriority;
     }
 
+    public Task(){}
+
     public String getTaskName() {
         return taskName;
     }

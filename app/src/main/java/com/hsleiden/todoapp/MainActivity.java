@@ -3,10 +3,14 @@ package com.hsleiden.todoapp;
 import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.hsleiden.todoapp.model.Task;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -29,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
     private static final int SECOND_ACTIVITY_REQUEST_CODE = 0;
 
     TaskRecyclerViewAdapter adapter;
-    FirebaseDatabase firebaseDatabase;
 
     //todo can probably make sortedstate less verbose
     private int sortedState = 0; // 0 implies unsorted, 1 implies sorted by date, 2 by priority
@@ -45,22 +48,44 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         final Intent intent = new Intent(this, NewTaskActivity.class);
 
         // todo create a little example of a task for users.
-        Task testTask = new Task("Test Task 1",
-                "2000-01-01",
-                5);
+//        Task testTask = new Task("Test Task 1",
+//                "2000-01-01",
+//                5);
+//
+//
+//        Task testTask2 = new Task("Test Task 2",
+//                "2001-01-01",
+//                3);
+//
+//        Task testTask3 = new Task("Test Task 3",
+//                "2002-01-01",
+//                7);
+//
+//        tasks.add(testTask);
+//        tasks.add(testTask2);
+//        tasks.add(testTask3);
 
+        // Fire base handling
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference reference = firebaseDatabase.getReference();
+        DatabaseReference allTasksReference = reference.child("tasks");
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()){
+                    Task task = ds.getValue(Task.class);
+                    tasks.add(task);
 
-        Task testTask2 = new Task("Test Task 2",
-                "2001-01-01",
-                3);
+                }
+            }
 
-        Task testTask3 = new Task("Test Task 3",
-                "2002-01-01",
-                7);
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        tasks.add(testTask);
-        tasks.add(testTask2);
-        tasks.add(testTask3);
+            }
+        };
+        allTasksReference.addListenerForSingleValueEvent(valueEventListener);
+
 
         // ------
         // Recycler view Creation
@@ -91,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
             @Override
             public void onClick(View view) {
                 switch (sortedState) {
-                    // Todo fix string resources.
                     case 0:
                         tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
                         adapter.notifyDataSetChanged();
