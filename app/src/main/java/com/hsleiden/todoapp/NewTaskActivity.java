@@ -10,6 +10,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.hsleiden.todoapp.model.Task;
 
 import java.util.Date;
@@ -20,6 +22,9 @@ public class NewTaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
+
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference reference = firebaseDatabase.getReference();
 
         final NumberPicker taskPriority = (NumberPicker) findViewById(R.id.taskNumberPicker);
         taskPriority.setMinValue(1);
@@ -47,6 +52,9 @@ public class NewTaskActivity extends AppCompatActivity {
                     intent.putExtra("taskDateMonth", taskDate.getMonth());
                     intent.putExtra("taskDateDay", taskDate.getDayOfMonth());
                     intent.putExtra("taskPriority", taskPriority.getValue());
+
+                    // todo newTask.getTaskName should be a unique identifier of some kind.
+                    reference.child("tasks").child(newTask.getTaskName()).setValue(newTask);
 
                     setResult(RESULT_OK, intent);
                     finish();

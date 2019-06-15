@@ -3,6 +3,8 @@ package com.hsleiden.todoapp;
 import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.hsleiden.todoapp.model.Task;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.ContactsContract;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
     private static final int SECOND_ACTIVITY_REQUEST_CODE = 0;
 
     TaskRecyclerViewAdapter adapter;
+    FirebaseDatabase firebaseDatabase;
 
     //todo can probably make sortedstate less verbose
     private int sortedState = 0; // 0 implies unsorted, 1 implies sorted by date, 2 by priority
@@ -57,9 +61,6 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         tasks.add(testTask);
         tasks.add(testTask2);
         tasks.add(testTask3);
-
-
-
 
         // ------
         // Recycler view Creation
@@ -123,6 +124,8 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
             Toast.makeText(getApplicationContext(), getString(R.string.sorted_date), Toast.LENGTH_LONG).show();
             sortedState = 2;
         }
+
+
     }
 
     /* Todo, temporarily this method deletes a task on click. On click should later
