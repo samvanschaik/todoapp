@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
                 for (DataSnapshot ds : dataSnapshot.getChildren()){
                     Task task = ds.getValue(Task.class);
                     tasks.add(task);
-
+                    adapter.notifyDataSetChanged();
                 }
             }
 
@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
             }
         };
         allTasksReference.addListenerForSingleValueEvent(valueEventListener);
-
 
         // ------
         // Recycler view Creation
