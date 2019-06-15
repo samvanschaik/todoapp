@@ -39,15 +39,14 @@ public class NewTaskActivity extends AppCompatActivity {
             if(taskName.getText().length() == 0){
                 taskName.setError("Your task needs a name!");
             } else {
-                Task newTask = new Task(
+                // todo newTask.getTaskName should be a unique identifier of some kind.
+                reference.child("tasks").child(taskName.getText().toString()).setValue(
+                        new Task(
                         taskName.getText().toString(),
                         taskDate.getYear() + "-" +
                                 taskDate.getMonth() + "-" +
                                 taskDate.getDayOfMonth(),
-                        taskPriority.getValue());
-
-                // todo newTask.getTaskName should be a unique identifier of some kind.
-                reference.child("tasks").child(newTask.getTaskName()).setValue(newTask);
+                        taskPriority.getValue()));
 
                 startActivity(intent);
             }
