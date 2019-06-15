@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                tasks.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()){
                     Task task = ds.getValue(Task.class);
                     tasks.add(task);
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
 
             }
         };
-        allTasksReference.addListenerForSingleValueEvent(valueEventListener);
+        allTasksReference.addValueEventListener(valueEventListener);
 
         // ------
         // Recycler view Creation
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(intent, SECOND_ACTIVITY_REQUEST_CODE);
+                startActivity(intent);
             }
         });
 
@@ -180,20 +181,5 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SECOND_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                tasks.add(new Task(
-                                data.getStringExtra("taskName"),
-                                data.getStringExtra("taskDate"),
-                                data.getIntExtra("taskPriority", 0)));
-
-                adapter.notifyDataSetChanged();
-            }
-        }
     }
 }
