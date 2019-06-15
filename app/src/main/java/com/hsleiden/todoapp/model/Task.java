@@ -6,10 +6,10 @@ import java.util.Date;
 public class Task implements Serializable {
 
     private String taskName;
-    private Date taskDate;
+    private String taskDate;
     private int taskPriority;
 
-    public Task(String taskName, Date taskDate, int taskPriority) {
+    public Task(String taskName, String taskDate, int taskPriority) {
         this.taskName = taskName;
         this.taskDate = taskDate;
         this.taskPriority = taskPriority;
@@ -23,11 +23,11 @@ public class Task implements Serializable {
         this.taskName = taskName;
     }
 
-    public Date getTaskDate() {
+    public String getTaskDate() {
         return taskDate;
     }
 
-    public void setTaskDate(Date taskDate) {
+    public void setTaskDate(String taskDate) {
         this.taskDate = taskDate;
     }
 

@@ -37,9 +37,7 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
         holder.taskNameView.setText(task.getTaskName());
         holder.taskPriorityView.setText(String.valueOf(task.getTaskPriority()));
 
-        String date = String.valueOf(task.getTaskDate().getDay()) + "/"
-                + String.valueOf(task.getTaskDate().getMonth()) + "/"
-                + String.valueOf(task.getTaskDate().getYear());
+        String date = task.getTaskDate();
         holder.taskDateView.setText(date);
     }
 

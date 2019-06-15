@@ -43,14 +43,15 @@ public class NewTaskActivity extends AppCompatActivity {
                 if(taskName.getText().length() == 0){
                     taskName.setError("Your task needs a name!");
                 } else {
-                    Task newTask = new Task(taskName.getText().toString(),
-                            new Date(taskDate.getYear(), taskDate.getMonth(), taskDate.getDayOfMonth()),
+                    Task newTask = new Task(
+                            taskName.getText().toString(),
+                            taskDate.getYear() + "-" +
+                                    taskDate.getMonth() + "-" +
+                                    taskDate.getDayOfMonth(),
                             taskPriority.getValue());
 
                     intent.putExtra("taskName", taskName.getText().toString());
-                    intent.putExtra("taskDateYear", taskDate.getYear());
-                    intent.putExtra("taskDateMonth", taskDate.getMonth());
-                    intent.putExtra("taskDateDay", taskDate.getDayOfMonth());
+                    intent.putExtra("taskDate", newTask.getTaskDate());
                     intent.putExtra("taskPriority", taskPriority.getValue());
 
                     // todo newTask.getTaskName should be a unique identifier of some kind.

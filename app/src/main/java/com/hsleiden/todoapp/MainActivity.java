@@ -46,16 +46,16 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
 
         // todo create a little example of a task for users.
         Task testTask = new Task("Test Task 1",
-                new Date(2000, 1, 1),
+                "2000-01-01",
                 5);
 
 
         Task testTask2 = new Task("Test Task 2",
-                new Date(2001, 1, 1),
+                "2001-01-01",
                 3);
 
         Task testTask3 = new Task("Test Task 3",
-                new Date(2002, 1, 1),
+                "2002-01-01",
                 7);
 
         tasks.add(testTask);
@@ -162,19 +162,13 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == SECOND_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                String taskName = data.getStringExtra("taskName");
-                int taskDateYear= data.getIntExtra("taskDateYear", 0);
-                int taskDateMonth = data.getIntExtra("taskDateMonth", 0 );
-                int taskDateDay = data.getIntExtra("taskDateDay", 0 );
-                int taskPriority = data.getIntExtra("taskPriority", 0);
+                tasks.add(new Task(
+                                data.getStringExtra("taskName"),
+                                data.getStringExtra("taskDate"),
+                                data.getIntExtra("taskPriority", 0)));
 
-                // todo clean this bit up a lil'
-                Date taskDate = new Date(taskDateYear, taskDateMonth, taskDateDay);
-                Task newTask = new Task(taskName, taskDate, taskPriority);
-                tasks.add(newTask);
                 adapter.notifyDataSetChanged();
             }
         }
