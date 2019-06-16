@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -149,16 +150,35 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
             sortedState = 2;
         }
 
+        // Delete / Complete item on swipe.
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(
+                0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                Toast.makeText(MainActivity.this, getString(R.string.task_completed), Toast.LENGTH_SHORT).show();
+                int position = viewHolder.getAdapterPosition();
+                reference.child("tasks").child(tasks.get(position).getTaskName()).removeValue();
+                tasks.remove(position);
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     /* Todo, temporarily this method deletes a task on click. On click should later
     edit the task, and a seperate button for completing it should be added. */
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(this, getString(R.string.deleted_task) + adapter.getItem(position).getTaskName(), Toast.LENGTH_LONG).show();
-        tasks.remove(position);
-        adapter.notifyDataSetChanged();
+//        Toast.makeText(this, getString(R.string.deleted_task) + adapter.getItem(position).getTaskName(), Toast.LENGTH_LONG).show();
+//        tasks.remove(position);
+//        adapter.notifyDataSetChanged();
     }
 
     @Override

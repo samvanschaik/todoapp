@@ -13,4 +13,5 @@
     <string name="give_your_task_a_priority">Give your task a priority.</string>
     <string name="add_your_task">ADD YOUR TASK</string>
     <string name="what_is_your_deadline">What is your deadline?</string>
+    <string name="task_completed">Task completed!</string>
 </resources>
