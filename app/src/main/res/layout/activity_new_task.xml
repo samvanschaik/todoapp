@@ -68,7 +68,11 @@
         android:layout_height="wrap_content"
         android:text="@string/add_your_task"
         android:layout_marginTop="20dp"
-        android:background="@color/colorSecondaryOrange"
+        android:backgroundTint="@color/colorSecondaryOrange"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

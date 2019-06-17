@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -13,6 +14,7 @@ import com.hsleiden.todoapp.model.Task;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -140,6 +142,10 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         adapter.notifyDataSetChanged();
+
+        CoordinatorLayout coordinatorLayout = findViewById(R.id.coordinator);
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, getString(R.string.tutorial_1), Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     @Override

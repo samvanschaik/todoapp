@@ -15,4 +15,5 @@
     <string name="task_completed">Task completed!</string>
     <string name="edit_your_task">EDIT YOUR TASK</string>
     <string name="task_name_error">Your task needs a name!</string>
+    <string name="tutorial_1">Swipe to complete, tap to edit!</string>
 </resources>
