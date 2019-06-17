@@ -42,8 +42,6 @@ public class EditTaskActivity extends AppCompatActivity {
         taskPriorityPicker.setMaxValue(9);
 
         DatabaseReference reference = Utils.getDatabase().getReference().child("tasks");
-//        DatabaseReference taskReference = firebaseDatabase.getReference().child("tasks").child(taskName);
-
         reference.child(taskName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
