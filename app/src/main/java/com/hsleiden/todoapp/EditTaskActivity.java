@@ -21,10 +21,12 @@ import java.time.format.DateTimeFormatter;
 
 public class EditTaskActivity extends AppCompatActivity {
     Task task = new Task();
-    final Intent intent = new Intent(this, MainActivity.class);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final Intent intent = new Intent(this, MainActivity.class);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
 
@@ -33,6 +35,7 @@ public class EditTaskActivity extends AppCompatActivity {
 
         EditText taskNameField = findViewById(R.id.taskNameField);
         DatePicker taskDatePicker = findViewById(R.id.taskDatePicker);
+        taskDatePicker.setMinDate(System.currentTimeMillis()); // Ensures data is in future.
         NumberPicker taskPriorityPicker = findViewById(R.id.taskNumberPicker);
         taskPriorityPicker.setMinValue(1);
         taskPriorityPicker.setMaxValue(9);
