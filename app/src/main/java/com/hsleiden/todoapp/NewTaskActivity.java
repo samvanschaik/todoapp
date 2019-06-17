@@ -14,6 +14,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.hsleiden.todoapp.model.Task;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class NewTaskActivity extends AppCompatActivity {
 
     @Override
@@ -24,29 +27,32 @@ public class NewTaskActivity extends AppCompatActivity {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference reference = firebaseDatabase.getReference();
 
-        final NumberPicker taskPriority = findViewById(R.id.taskNumberPicker);
-        taskPriority.setMinValue(1);
-        taskPriority.setMaxValue(9);
+        final NumberPicker taskPriorityPicker = findViewById(R.id.taskNumberPicker);
+        taskPriorityPicker.setMinValue(1);
+        taskPriorityPicker.setMaxValue(9);
 
-        Button b = findViewById(R.id.taskCreateButton);
+        Button button = findViewById(R.id.taskCreateButton);
 
-        final EditText taskName = findViewById(R.id.taskNameField);
-        final DatePicker taskDate = findViewById(R.id.taskDatePicker);
+        final EditText taskNameField = findViewById(R.id.taskNameField);
+
+        final DatePicker taskDatePicker = findViewById(R.id.taskDatePicker);
+        taskDatePicker.setMinDate(System.currentTimeMillis()); // Ensures data is in future.
 
         final Intent intent = new Intent(this, MainActivity.class);
 
-        b.setOnClickListener(view -> {
-            if(taskName.getText().length() == 0){
-                taskName.setError("Your task needs a name!");
+        button.setOnClickListener(view -> {
+            if(taskNameField.getText().length() == 0){
+                taskNameField.setError(getString(R.string.task_name_error));
             } else {
                 // todo newTask.getTaskName should be a unique identifier of some kind.
-                reference.child("tasks").child(taskName.getText().toString()).setValue(
+
+                reference.child("tasks").child(taskNameField.getText().toString()).setValue(
                         new Task(
-                        taskName.getText().toString(),
-                        taskDate.getYear() + "-" +
-                                taskDate.getMonth() + "-" +
-                                taskDate.getDayOfMonth(),
-                        taskPriority.getValue()));
+                        taskNameField.getText().toString(),
+                        taskDatePicker.getYear() + "-" +
+                                taskDatePicker.getMonth() + "-" +
+                                taskDatePicker.getDayOfMonth(),
+                        taskPriorityPicker.getValue()));
 
                 startActivity(intent);
             }

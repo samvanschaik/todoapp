@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.ContactsContract;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,15 +26,9 @@ import android.widget.Toast;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements TaskRecyclerViewAdapter.ItemClickListener, Serializable  {
-    private static final int SECOND_ACTIVITY_REQUEST_CODE = 0;
-
-    TaskRecyclerViewAdapter adapter;
-
-    //todo can probably make sortedstate less verbose
+    public TaskRecyclerViewAdapter adapter;
     private int sortedState = 0; // 0 implies unsorted, 1 implies sorted by date, 2 by priority
     private ArrayList<Task> tasks = new ArrayList<>();
 
@@ -45,26 +38,6 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        final Intent intent = new Intent(this, NewTaskActivity.class);
-
-        // todo create a little example of a task for users.
-//        Task testTask = new Task("Test Task 1",
-//                "2000-01-01",
-//                5);
-//
-//
-//        Task testTask2 = new Task("Test Task 2",
-//                "2001-01-01",
-//                3);
-//
-//        Task testTask3 = new Task("Test Task 3",
-//                "2002-01-01",
-//                7);
-//
-//        tasks.add(testTask);
-//        tasks.add(testTask2);
-//        tasks.add(testTask3);
 
         // Fire base handling
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -83,25 +56,25 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                //todo Log Database error.
             }
         };
         allTasksReference.addValueEventListener(valueEventListener);
 
-        // ------
         // Recycler view Creation
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new TaskRecyclerViewAdapter(this, tasks);
         adapter.setClickListener(this);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
+                recyclerView.getContext(),
                 layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(adapter);
 
-        //------
-        // Floating Action Button Add Creation and onClick handling.
+        // FAB Add Task
+        final Intent intent = new Intent(this, NewTaskActivity.class);
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,8 +83,7 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
             }
         });
 
-        //------
-        // Floating Action Button Sort Creation and onClick handling.
+        // FAB Sort Tasks
         FloatingActionButton fabSort = findViewById(R.id.fabSort);
         fabSort.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,20 +92,20 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
                     case 0:
                         tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
                         adapter.notifyDataSetChanged();
-                        Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
                         sortedState = 2;
                         break;
 
                     case 1:
-                        tasks.sort(Comparator.comparing(Task::getTaskPriority));
-                        Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_LONG).show();
+                        tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
+                        Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
                         sortedState = 2;
                         adapter.notifyDataSetChanged();
                         break;
 
                     case 2:
                         tasks.sort(Comparator.comparing(Task::getTaskDate));
-                        Toast.makeText(getApplicationContext(), getString(R.string.sorted_date), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.sorted_date), Toast.LENGTH_SHORT).show();
                         sortedState = 1;
                         adapter.notifyDataSetChanged();
                         break;
@@ -141,12 +113,11 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
             }
         });
 
-        // todo Could implement a user setting for default sorting
         // Sort tasks on start up
         if(sortedState == 0){
             tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
             adapter.notifyDataSetChanged();
-            Toast.makeText(getApplicationContext(), getString(R.string.sorted_date), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
             sortedState = 2;
         }
 
@@ -172,13 +143,11 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-    /* Todo, temporarily this method deletes a task on click. On click should later
-    edit the task, and a seperate button for completing it should be added. */
     @Override
     public void onItemClick(View view, int position) {
-//        Toast.makeText(this, getString(R.string.deleted_task) + adapter.getItem(position).getTaskName(), Toast.LENGTH_LONG).show();
-//        tasks.remove(position);
-//        adapter.notifyDataSetChanged();
+        Intent myIntent = new Intent(this, EditTaskActivity.class);
+        myIntent.putExtra("taskName",tasks.get(position).getTaskName());
+        startActivity(myIntent);
     }
 
     @Override

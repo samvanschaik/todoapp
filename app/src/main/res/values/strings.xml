@@ -14,4 +14,6 @@
     <string name="add_your_task">ADD YOUR TASK</string>
     <string name="what_is_your_deadline">What is your deadline?</string>
     <string name="task_completed">Task completed!</string>
+    <string name="edit_your_task">EDIT YOUR TASK</string>
+    <string name="task_name_error">Your task needs a name!</string>
 </resources>
