@@ -39,10 +39,9 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Fire base handling
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference reference = firebaseDatabase.getReference();
-        DatabaseReference allTasksReference = reference.child("tasks");
+        // Fire base handling;
+//        DatabaseReference reference = Utils.getDatabase().getReference();
+        DatabaseReference reference = Utils.getDatabase().getReference().child("tasks");
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -55,11 +54,14 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
 
                 // Sort tasks on start up
                 if(sortedState == 0){
+                    // todo this gets called on data change for some reason, still.
                     tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
                     adapter.notifyDataSetChanged();
                     Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
                     sortedState = 2;
                 }
+
+                // todo re sort new data in view.
             }
 
             @Override
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
                 //todo Log Database error.
             }
         };
-        allTasksReference.addValueEventListener(valueEventListener);
+        reference.addValueEventListener(valueEventListener);
 
         // Recycler view Creation
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
@@ -135,13 +137,15 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 Toast.makeText(MainActivity.this, getString(R.string.task_completed), Toast.LENGTH_SHORT).show();
                 int position = viewHolder.getAdapterPosition();
-                reference.child("tasks").child(tasks.get(position).getTaskName()).removeValue();
+                reference.child(tasks.get(position).getTaskName()).removeValue();
                 tasks.remove(position);
             }
         };
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        adapter.notifyDataSetChanged();
     }
 
     @Override

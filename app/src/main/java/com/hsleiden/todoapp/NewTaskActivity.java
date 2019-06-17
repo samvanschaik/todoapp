@@ -24,8 +24,7 @@ public class NewTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
 
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference reference = firebaseDatabase.getReference();
+        DatabaseReference reference = Utils.getDatabase().getReference();
 
         final NumberPicker taskPriorityPicker = findViewById(R.id.taskNumberPicker);
         taskPriorityPicker.setMinValue(1);

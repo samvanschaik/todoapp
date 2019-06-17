@@ -41,11 +41,10 @@ public class EditTaskActivity extends AppCompatActivity {
         taskPriorityPicker.setMinValue(1);
         taskPriorityPicker.setMaxValue(9);
 
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference reference = firebaseDatabase.getReference();
-        DatabaseReference taskReference = firebaseDatabase.getReference().child("tasks").child(taskName);
+        DatabaseReference reference = Utils.getDatabase().getReference().child("tasks");
+//        DatabaseReference taskReference = firebaseDatabase.getReference().child("tasks").child(taskName);
 
-        taskReference.addValueEventListener(new ValueEventListener() {
+        reference.child(taskName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 task = snapshot.getValue(Task.class);
@@ -74,7 +73,7 @@ public class EditTaskActivity extends AppCompatActivity {
             if(taskNameField.getText().length() == 0){
                 taskNameField.setError(getString(R.string.task_name_error));
             } else {
-                reference.child("tasks").child(task.getTaskName()).setValue(
+                reference.child(task.getTaskName()).setValue(
                         new Task(
                                 taskNameField.getText().toString(),
                                 taskDatePicker.getYear() + "-" +
