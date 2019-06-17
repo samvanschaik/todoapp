@@ -52,6 +52,14 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
                     tasks.add(task);
                     adapter.notifyDataSetChanged();
                 }
+
+                // Sort tasks on start up
+                if(sortedState == 0){
+                    tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
+                    sortedState = 2;
+                }
             }
 
             @Override
@@ -113,13 +121,6 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
             }
         });
 
-        // Sort tasks on start up
-        if(sortedState == 0){
-            tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
-            adapter.notifyDataSetChanged();
-            Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
-            sortedState = 2;
-        }
 
         // Delete / Complete item on swipe.
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(

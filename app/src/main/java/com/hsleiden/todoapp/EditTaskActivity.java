@@ -45,8 +45,6 @@ public class EditTaskActivity extends AppCompatActivity {
         DatabaseReference reference = firebaseDatabase.getReference();
         DatabaseReference taskReference = firebaseDatabase.getReference().child("tasks").child(taskName);
 
-
-
         taskReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -87,9 +85,5 @@ public class EditTaskActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-
-
     }
 }
