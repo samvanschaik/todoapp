@@ -5,7 +5,6 @@
     <!-- Main Activity Strings-->
     <string name="sorted_priority">Tasks are now sorted by priority.</string>
     <string name="sorted_date">"Tasks are now sorted by date."</string>
-    <string name="deleted_task">"Deleted task: "</string>
 
     <!-- New Task Activity Strings-->
     <string name="task_name">Task name</string>

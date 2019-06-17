@@ -1,7 +1,6 @@
 package com.hsleiden.todoapp.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class Task implements Serializable {
 
@@ -21,23 +20,12 @@ public class Task implements Serializable {
         return taskName;
     }
 
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
-    }
-
     public String getTaskDate() {
         return taskDate;
-    }
-
-    public void setTaskDate(String taskDate) {
-        this.taskDate = taskDate;
     }
 
     public int getTaskPriority() {
         return taskPriority;
     }
 
-    public void setTaskPriority(int taskPriority) {
-        this.taskPriority = taskPriority;
-    }
 }
