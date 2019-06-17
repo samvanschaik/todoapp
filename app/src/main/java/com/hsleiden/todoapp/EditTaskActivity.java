@@ -1,5 +1,6 @@
 package com.hsleiden.todoapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -8,24 +9,19 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hsleiden.todoapp.model.Task;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 public class EditTaskActivity extends AppCompatActivity {
     Task task = new Task();
+    final Intent intent = new Intent(this, MainActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +40,10 @@ public class EditTaskActivity extends AppCompatActivity {
         DatabaseReference reference = Utils.getDatabase().getReference().child("tasks");
         reference.child(taskName).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
                 task = snapshot.getValue(Task.class);
 
+                assert task != null;
                 taskNameField.setText(task.getTaskName());
                 taskNameField.setEnabled(false);
 
@@ -57,15 +54,13 @@ public class EditTaskActivity extends AppCompatActivity {
                 taskPriorityPicker.setValue(task.getTaskPriority());
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 // todo logging
             }
         });
 
         Button button = findViewById(R.id.taskCreateButton);
         button.setText(getString(R.string.edit_your_task));
-
-        final Intent intent = new Intent(this, MainActivity.class);
 
         button.setOnClickListener(view -> {
             if(taskNameField.getText().length() == 0){

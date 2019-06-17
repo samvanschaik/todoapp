@@ -2,6 +2,7 @@ package com.hsleiden.todoapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,7 +18,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.Settings;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +27,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class MainActivity extends AppCompatActivity implements TaskRecyclerViewAdapter.ItemClickListener, Serializable  {
+public class MainActivity extends AppCompatActivity implements TaskRecyclerViewAdapter.ItemClickListener, Serializable {
     public TaskRecyclerViewAdapter adapter;
     private int sortedState = 0; // 0 implies unsorted, 1 implies sorted by date, 2 by priority
     private ArrayList<Task> tasks = new ArrayList<>();
@@ -46,14 +46,14 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 tasks.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren()){
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Task task = ds.getValue(Task.class);
                     tasks.add(task);
                     adapter.notifyDataSetChanged();
                 }
 
                 // Sort tasks on start up
-                if(sortedState == 0){
+                if (sortedState == 0) {
                     // todo this gets called on data change for some reason, still.
                     tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
                     adapter.notifyDataSetChanged();
@@ -86,40 +86,32 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         // FAB Add Task
         final Intent intent = new Intent(this, NewTaskActivity.class);
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
-        fabAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(intent);
-            }
-        });
+        fabAdd.setOnClickListener(view -> startActivity(intent));
 
         // FAB Sort Tasks
         FloatingActionButton fabSort = findViewById(R.id.fabSort);
-        fabSort.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (sortedState) {
-                    case 0:
-                        tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
-                        adapter.notifyDataSetChanged();
-                        Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
-                        sortedState = 2;
-                        break;
+        fabSort.setOnClickListener(view -> {
+            switch (sortedState) {
+                case 0:
+                    tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
+                    sortedState = 2;
+                    break;
 
-                    case 1:
-                        tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
-                        Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
-                        sortedState = 2;
-                        adapter.notifyDataSetChanged();
-                        break;
+                case 1:
+                    tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
+                    Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
+                    sortedState = 2;
+                    adapter.notifyDataSetChanged();
+                    break;
 
-                    case 2:
-                        tasks.sort(Comparator.comparing(Task::getTaskDate));
-                        Toast.makeText(getApplicationContext(), getString(R.string.sorted_date), Toast.LENGTH_SHORT).show();
-                        sortedState = 1;
-                        adapter.notifyDataSetChanged();
-                        break;
-                }
+                case 2:
+                    tasks.sort(Comparator.comparing(Task::getTaskDate));
+                    Toast.makeText(getApplicationContext(), getString(R.string.sorted_date), Toast.LENGTH_SHORT).show();
+                    sortedState = 1;
+                    adapter.notifyDataSetChanged();
+                    break;
             }
         });
 
@@ -129,7 +121,9 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
                 0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
             @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
                 return false;
             }
 
@@ -151,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
     @Override
     public void onItemClick(View view, int position) {
         Intent myIntent = new Intent(this, EditTaskActivity.class);
-        myIntent.putExtra("taskName",tasks.get(position).getTaskName());
+        myIntent.putExtra("taskName", tasks.get(position).getTaskName());
         startActivity(myIntent);
     }
 

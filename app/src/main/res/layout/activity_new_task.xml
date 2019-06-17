@@ -30,7 +30,7 @@
             android:importantForAutofill="no"
             android:inputType="text" />
 
-        <View style="@style/Divider"></View>
+        <View style="@style/Divider" />
 
         <TextView
             android:id="@+id/taskDateText"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:text="@string/what_is_your_deadline" />/>
+            android:text="@string/what_is_your_deadline" />
 
         <DatePicker
             android:id="@+id/taskDatePicker"
@@ -47,7 +47,7 @@
             android:layout_gravity="center"
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
-            android:spinnersShown="true"></DatePicker>
+            android:spinnersShown="true" />
 
         <View style="@style/Divider" />
 
@@ -62,10 +62,7 @@
         <NumberPicker
             android:id="@+id/taskNumberPicker"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></NumberPicker>
-
-
-
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <Button
