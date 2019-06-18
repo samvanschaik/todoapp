@@ -1,6 +1,5 @@
 package com.hsleiden.todoapp;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -20,17 +19,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.TransitionManager;
 
-import android.transition.Explode;
-import android.transition.Fade;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
-import android.widget.Toast;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -40,10 +33,11 @@ import static com.hsleiden.todoapp.SortedState.*;
 enum SortedState{PRIORITY, DATE, NONE}
 
 // TODO: Split Database logic, UI creation and App logic into different classes where possible.
-public class MainActivity extends AppCompatActivity implements TaskRecyclerViewAdapter.ItemClickListener {
+public class MainActivity extends AppCompatActivity
+        implements TaskRecyclerViewAdapter.ItemClickListener {
     public TaskRecyclerViewAdapter adapter;
     private static DatabaseReference reference = Utils.getDatabase().getReference().child("tasks");
-    private SortedState sortedState = NONE; // 0 implies unsorted, 1 implies sorted by date, 2 by priority
+    private SortedState sortedState = NONE;
     private ArrayList<Task> tasks = new ArrayList<>();
 
     @Override
@@ -60,13 +54,13 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         createRecyclerView();
 
         // TODO: Make this not happen every time the user returns to this screen.
-        createSwipeHint();
+        createInfoBar(getString(R.string.tutorial_1));
 
         adapter.notifyDataSetChanged();
     }
 
+    /* Creates the recycler view that contains our tasks. */
     private void createRecyclerView() {
-        // Recycler view Creation
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -78,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(adapter);
 
-        // Delete / Complete item on swipe.
+        /* Handles the swiping of tasks. */
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(
                 0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
@@ -90,14 +84,8 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
             }
 
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                Toast.makeText(MainActivity.this,
-                        getString(R.string.task_completed),
-                        Toast.LENGTH_SHORT).show();
-                int position = viewHolder.getAdapterPosition();
-                reference.child(tasks.get(position).getTaskName()).removeValue();
-                tasks.remove(position);
-                adapter.notifyDataSetChanged();
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                removeTaskFromView(viewHolder, swipeDir);
             }
         };
 
@@ -105,16 +93,16 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-
-
-    /* Creates toast that explains task completion functionality to the user.*/
-    private void createSwipeHint() {
-        CoordinatorLayout coordinatorLayout = findViewById(R.id.coordinator);
-        Snackbar snackbar = Snackbar.make(coordinatorLayout,
-                getString(R.string.tutorial_1),
-                Snackbar.LENGTH_LONG);
-        snackbar.show();
+    private void removeTaskFromView(RecyclerView.ViewHolder viewHolder, int swipeDir){
+        createInfoBar(getString(R.string.task_completed));
+        int position = viewHolder.getAdapterPosition();
+        reference.child(tasks.get(position).getTaskName()).removeValue();
+        tasks.remove(position);
+        adapter.notifyDataSetChanged();
     }
+
+
+
 
     /* Handles synchronization with the back end.*/
     private void startFirebase() {
@@ -178,13 +166,13 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
     private void sortTasksByPriority(){
         tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
         adapter.notifyDataSetChanged();
-        Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
+        createInfoBar(getString(R.string.sorted_priority));
         sortedState = PRIORITY;
     }
 
     private void sortTasksByDate(){
         tasks.sort(Comparator.comparing(Task::getTaskDate));
-        Toast.makeText(getApplicationContext(), getString(R.string.sorted_date), Toast.LENGTH_SHORT).show();
+        createInfoBar(getString(R.string.sorted_date));
         sortedState = DATE;
         adapter.notifyDataSetChanged();
     }
@@ -204,13 +192,14 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         setSupportActionBar(toolbar);
     }
 
+    /* Creates the options menu when selected in the toolbar.*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
+    /* Handles*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -224,5 +213,14 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /* Creates Snackbar at the bottom of screen with a given text. */
+    private void createInfoBar(String barText) {
+        CoordinatorLayout coordinatorLayout = findViewById(R.id.coordinator);
+        Snackbar snackbar = Snackbar.make(coordinatorLayout,
+                barText,
+                Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 }
