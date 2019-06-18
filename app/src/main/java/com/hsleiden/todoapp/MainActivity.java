@@ -85,7 +85,9 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                Toast.makeText(MainActivity.this, getString(R.string.task_completed), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,
+                        getString(R.string.task_completed),
+                        Toast.LENGTH_SHORT).show();
                 int position = viewHolder.getAdapterPosition();
                 reference.child(tasks.get(position).getTaskName()).removeValue();
                 tasks.remove(position);
@@ -102,7 +104,9 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
     /* Creates toast that explains task completion functionality to the user.*/
     private void createSwipeHint() {
         CoordinatorLayout coordinatorLayout = findViewById(R.id.coordinator);
-        Snackbar snackbar = Snackbar.make(coordinatorLayout, getString(R.string.tutorial_1), Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(coordinatorLayout,
+                getString(R.string.tutorial_1),
+                Snackbar.LENGTH_LONG);
         snackbar.show();
     }
 
@@ -147,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         final Intent intent = new Intent(this, NewTaskActivity.class);
 
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
-        fabAdd.setOnClickListener(view -> startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle()));
+        fabAdd.setOnClickListener(view -> startActivity(intent));
     }
 
     /* Creates the FAB that allows users to sort their tasks */
