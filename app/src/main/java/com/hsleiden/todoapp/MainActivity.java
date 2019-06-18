@@ -43,16 +43,11 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Set animations
-        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        getWindow().setExitTransition(new Fade());
-
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Fire base handling;
-//        DatabaseReference reference = Utils.getDatabase().getReference();
         DatabaseReference reference = Utils.getDatabase().getReference().child("tasks");
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
@@ -103,31 +98,8 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         fabAdd.setOnClickListener(view -> startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle()));
 
         // FAB Sort Tasks
-        FloatingActionButton fabSort = findViewById(R.id.fabSort);
-        fabSort.setOnClickListener(view -> {
-            switch (sortedState) {
-                case 0:
-                    tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
-                    adapter.notifyDataSetChanged();
-                    Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
-                    sortedState = 2;
-                    break;
+        createSortButton();
 
-                case 1:
-                    tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
-                    Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
-                    sortedState = 2;
-                    adapter.notifyDataSetChanged();
-                    break;
-
-                case 2:
-                    tasks.sort(Comparator.comparing(Task::getTaskDate));
-                    Toast.makeText(getApplicationContext(), getString(R.string.sorted_date), Toast.LENGTH_SHORT).show();
-                    sortedState = 1;
-                    adapter.notifyDataSetChanged();
-                    break;
-            }
-        });
 
 
         // Delete / Complete item on swipe.
@@ -158,8 +130,34 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         CoordinatorLayout coordinatorLayout = findViewById(R.id.coordinator);
         Snackbar snackbar = Snackbar.make(coordinatorLayout, getString(R.string.tutorial_1), Snackbar.LENGTH_LONG);
         snackbar.show();
+    }
 
+    private void createSortButton() {
+        FloatingActionButton fabSort = findViewById(R.id.fabSort);
+        fabSort.setOnClickListener(view -> {
+            switch (sortedState) {
+                case 0:
+                    tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
+                    sortedState = 2;
+                    break;
 
+                case 1:
+                    tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
+                    Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
+                    sortedState = 2;
+                    adapter.notifyDataSetChanged();
+                    break;
+
+                case 2:
+                    tasks.sort(Comparator.comparing(Task::getTaskDate));
+                    Toast.makeText(getApplicationContext(), getString(R.string.sorted_date), Toast.LENGTH_SHORT).show();
+                    sortedState = 1;
+                    adapter.notifyDataSetChanged();
+                    break;
+            }
+        });
     }
 
     @Override
