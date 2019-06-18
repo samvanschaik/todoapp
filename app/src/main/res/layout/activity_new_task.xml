@@ -70,7 +70,6 @@
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/colorSecondaryOrange"
         android:clickable="true"
-        android:focusableInTouchMode="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
