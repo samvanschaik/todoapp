@@ -34,6 +34,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import static com.hsleiden.todoapp.SortedState.*;
+
 // TODO: Consider moving this out of the class.
 enum SortedState{PRIORITY, DATE, NONE}
 
@@ -41,7 +43,7 @@ enum SortedState{PRIORITY, DATE, NONE}
 public class MainActivity extends AppCompatActivity implements TaskRecyclerViewAdapter.ItemClickListener {
     public TaskRecyclerViewAdapter adapter;
     private static DatabaseReference reference = Utils.getDatabase().getReference().child("tasks");
-    private SortedState sortedState = SortedState.NONE; // 0 implies unsorted, 1 implies sorted by date, 2 by priority
+    private SortedState sortedState = NONE; // 0 implies unsorted, 1 implies sorted by date, 2 by priority
     private ArrayList<Task> tasks = new ArrayList<>();
 
     @Override
@@ -129,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
                 }
 
                 // Sorts tasks on start up
-                if (sortedState == SortedState.NONE) {
+                if (sortedState == NONE) {
                     // TODO: this gets called on data change for some reason, still.
                     sortTasksByPriority();
                 }
@@ -158,15 +160,15 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         FloatingActionButton fabSort = findViewById(R.id.fabSort);
         fabSort.setOnClickListener(view -> {
             switch (sortedState) {
-                case 0:
+                case NONE:
                     sortTasksByPriority();
                     break;
 
-                case 1:
+                case DATE:
                     sortTasksByPriority();
                     break;
 
-                case 2:
+                case PRIORITY:
                     sortTasksByDate();
                     break;
             }
@@ -177,13 +179,13 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
         adapter.notifyDataSetChanged();
         Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
-        sortedState = SortedState.PRIORITY;
+        sortedState = PRIORITY;
     }
 
     private void sortTasksByDate(){
         tasks.sort(Comparator.comparing(Task::getTaskDate));
         Toast.makeText(getApplicationContext(), getString(R.string.sorted_date), Toast.LENGTH_SHORT).show();
-        sortedState = SortedState.DATE;
+        sortedState = DATE;
         adapter.notifyDataSetChanged();
     }
 
