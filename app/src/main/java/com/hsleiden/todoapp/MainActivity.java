@@ -53,9 +53,6 @@ public class MainActivity extends AppCompatActivity
         createAddButton();
         createRecyclerView();
 
-        // TODO: Make this not happen every time the user returns to this screen.
-        createInfoBar(getString(R.string.tutorial_1));
-
         adapter.notifyDataSetChanged();
     }
 
@@ -93,6 +90,7 @@ public class MainActivity extends AppCompatActivity
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
+    /* Removes task from view and firebase. */
     private void removeTaskFromView(RecyclerView.ViewHolder viewHolder, int swipeDir){
         createInfoBar(getString(R.string.task_completed));
         int position = viewHolder.getAdapterPosition();
@@ -100,8 +98,6 @@ public class MainActivity extends AppCompatActivity
         tasks.remove(position);
         adapter.notifyDataSetChanged();
     }
-
-
 
 
     /* Handles synchronization with the back end.*/
@@ -117,13 +113,6 @@ public class MainActivity extends AppCompatActivity
                     tasks.add(task);
                     adapter.notifyDataSetChanged();
                 }
-
-                // Sorts tasks on start up
-                if (sortedState == NONE) {
-                    // TODO: this gets called on data change for some reason, still.
-                    sortTasksByPriority();
-                }
-
                 // TODO: Automatically sort data when added in view.
             }
 
@@ -163,6 +152,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    /* Sorts tasks by priority and updates the view (with an info bar attacked). */
     private void sortTasksByPriority(){
         tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
         adapter.notifyDataSetChanged();
@@ -170,6 +160,7 @@ public class MainActivity extends AppCompatActivity
         sortedState = PRIORITY;
     }
 
+    /* Sorts tasks by date and updates the view. (with an info bar attacked)*/
     private void sortTasksByDate(){
         tasks.sort(Comparator.comparing(Task::getTaskDate));
         createInfoBar(getString(R.string.sorted_date));
@@ -199,7 +190,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    /* Handles*/
+    /* Handles an item being selected in the option menu. */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
