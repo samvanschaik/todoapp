@@ -45,11 +45,21 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        createToolbar();
 
         startFirebase();
 
+        createSortButton();
+        createAddButton();
+        createRecyclerView();
+
+        // TODO: Make this not happen every time the user returns to this screen.
+        createSwipeHint();
+
+        adapter.notifyDataSetChanged();
+    }
+
+    private void createRecyclerView() {
         // Recycler view Creation
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -61,12 +71,6 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
                 layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(adapter);
-
-
-        // Create FAB Buttons
-        createSortButton();
-        createAddButton();
-
 
         // Delete / Complete item on swipe.
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(
@@ -85,22 +89,28 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
                 int position = viewHolder.getAdapterPosition();
                 reference.child(tasks.get(position).getTaskName()).removeValue();
                 tasks.remove(position);
+                adapter.notifyDataSetChanged();
             }
         };
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
 
-        adapter.notifyDataSetChanged();
 
+
+    /* Creates toast that explains task completion functionality to the user.*/
+    private void createSwipeHint() {
         CoordinatorLayout coordinatorLayout = findViewById(R.id.coordinator);
         Snackbar snackbar = Snackbar.make(coordinatorLayout, getString(R.string.tutorial_1), Snackbar.LENGTH_LONG);
         snackbar.show();
     }
 
+    /* Handles synchronization with the back end.*/
     private void startFirebase() {
-        // Fire base handling;
         ValueEventListener valueEventListener = new ValueEventListener() {
+
+            /*Creates a task for every task in the list for every task that exists in Firebase*/
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 tasks.clear();
@@ -110,12 +120,14 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
                     adapter.notifyDataSetChanged();
                 }
 
-                // Sort tasks on start up
+                // Sorts tasks on start up
                 if (sortedState == 0) {
                     // TODO: this gets called on data change for some reason, still.
                     tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
                     adapter.notifyDataSetChanged();
-                    Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),
+                            getString(R.string.sorted_priority),
+                            Toast.LENGTH_SHORT).show();
                     sortedState = 2;
                 }
 
@@ -130,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         reference.addValueEventListener(valueEventListener);
     }
 
+    /* Creates the FAB that allows users to add a task to the app. */
     private void createAddButton() {
         final Intent intent = new Intent(this, NewTaskActivity.class);
 
@@ -137,39 +150,53 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         fabAdd.setOnClickListener(view -> startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle()));
     }
 
+    /* Creates the FAB that allows users to sort their tasks */
     private void createSortButton() {
         FloatingActionButton fabSort = findViewById(R.id.fabSort);
         fabSort.setOnClickListener(view -> {
             switch (sortedState) {
                 case 0:
-                    tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
-                    adapter.notifyDataSetChanged();
-                    Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
-                    sortedState = 2;
+                    sortTasksByPriority();
                     break;
 
                 case 1:
-                    tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
-                    Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
-                    sortedState = 2;
-                    adapter.notifyDataSetChanged();
+                    sortTasksByPriority();
                     break;
 
                 case 2:
-                    tasks.sort(Comparator.comparing(Task::getTaskDate));
-                    Toast.makeText(getApplicationContext(), getString(R.string.sorted_date), Toast.LENGTH_SHORT).show();
-                    sortedState = 1;
-                    adapter.notifyDataSetChanged();
+                    sortTasksByDate();
                     break;
             }
         });
     }
 
+    private void sortTasksByPriority(){
+        tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
+        adapter.notifyDataSetChanged();
+        Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
+        sortedState = 2;
+    }
+
+    private void sortTasksByDate(){
+        tasks.sort(Comparator.comparing(Task::getTaskDate));
+        Toast.makeText(getApplicationContext(), getString(R.string.sorted_date), Toast.LENGTH_SHORT).show();
+        sortedState = 1;
+        adapter.notifyDataSetChanged();
+    }
+
+    /* Opens the Edit Task screen when a user clicks on a task. */
     @Override
     public void onItemClick(View view, int position) {
         Intent myIntent = new Intent(this, EditTaskActivity.class);
         myIntent.putExtra("taskName", tasks.get(position).getTaskName());
         startActivity(myIntent);
+    }
+
+    /* Creates toolbar that allows user to access the settings menu. */
+    /* TODO: Add user profile access here when users are implemented.*/
+    private void createToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     @Override
