@@ -1,5 +1,6 @@
 package com.hsleiden.todoapp;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -19,10 +20,14 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.TransitionManager;
 
+import android.transition.Explode;
+import android.transition.Fade;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.Toast;
 
 import java.io.Serializable;
@@ -37,6 +42,11 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Set animations
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        getWindow().setExitTransition(new Fade());
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -87,8 +97,10 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
 
         // FAB Add Task
         final Intent intent = new Intent(this, NewTaskActivity.class);
+
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
-        fabAdd.setOnClickListener(view -> startActivity(intent));
+
+        fabAdd.setOnClickListener(view -> startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle()));
 
         // FAB Sort Tasks
         FloatingActionButton fabSort = findViewById(R.id.fabSort);
@@ -146,6 +158,8 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         CoordinatorLayout coordinatorLayout = findViewById(R.id.coordinator);
         Snackbar snackbar = Snackbar.make(coordinatorLayout, getString(R.string.tutorial_1), Snackbar.LENGTH_LONG);
         snackbar.show();
+
+
     }
 
     @Override
