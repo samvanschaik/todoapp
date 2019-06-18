@@ -34,8 +34,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class MainActivity extends AppCompatActivity implements TaskRecyclerViewAdapter.ItemClickListener, Serializable {
+public class MainActivity extends AppCompatActivity implements TaskRecyclerViewAdapter.ItemClickListener {
     public TaskRecyclerViewAdapter adapter;
+    private static DatabaseReference reference = Utils.getDatabase().getReference().child("tasks");
     private int sortedState = 0; // 0 implies unsorted, 1 implies sorted by date, 2 by priority
     private ArrayList<Task> tasks = new ArrayList<>();
 
@@ -47,36 +48,7 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Fire base handling;
-        DatabaseReference reference = Utils.getDatabase().getReference().child("tasks");
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                tasks.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Task task = ds.getValue(Task.class);
-                    tasks.add(task);
-                    adapter.notifyDataSetChanged();
-                }
-
-                // Sort tasks on start up
-                if (sortedState == 0) {
-                    // todo this gets called on data change for some reason, still.
-                    tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
-                    adapter.notifyDataSetChanged();
-                    Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
-                    sortedState = 2;
-                }
-
-                // todo re sort new data in view.
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                //todo Log Database error.
-            }
-        };
-        reference.addValueEventListener(valueEventListener);
+        startFirebase();
 
         // Recycler view Creation
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
@@ -90,16 +62,10 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(adapter);
 
-        // FAB Add Task
-        final Intent intent = new Intent(this, NewTaskActivity.class);
 
-        FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
-
-        fabAdd.setOnClickListener(view -> startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle()));
-
-        // FAB Sort Tasks
+        // Create FAB Buttons
         createSortButton();
-
+        createAddButton();
 
 
         // Delete / Complete item on swipe.
@@ -130,6 +96,45 @@ public class MainActivity extends AppCompatActivity implements TaskRecyclerViewA
         CoordinatorLayout coordinatorLayout = findViewById(R.id.coordinator);
         Snackbar snackbar = Snackbar.make(coordinatorLayout, getString(R.string.tutorial_1), Snackbar.LENGTH_LONG);
         snackbar.show();
+    }
+
+    private void startFirebase() {
+        // Fire base handling;
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                tasks.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Task task = ds.getValue(Task.class);
+                    tasks.add(task);
+                    adapter.notifyDataSetChanged();
+                }
+
+                // Sort tasks on start up
+                if (sortedState == 0) {
+                    // TODO: this gets called on data change for some reason, still.
+                    tasks.sort(Comparator.comparing(Task::getTaskPriority).reversed());
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(getApplicationContext(), getString(R.string.sorted_priority), Toast.LENGTH_SHORT).show();
+                    sortedState = 2;
+                }
+
+                // TODO: Automatically sort data when added in view.
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                //TODO: Handle error.
+            }
+        };
+        reference.addValueEventListener(valueEventListener);
+    }
+
+    private void createAddButton() {
+        final Intent intent = new Intent(this, NewTaskActivity.class);
+
+        FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
+        fabAdd.setOnClickListener(view -> startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle()));
     }
 
     private void createSortButton() {
