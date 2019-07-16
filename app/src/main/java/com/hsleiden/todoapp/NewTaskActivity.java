@@ -18,12 +18,16 @@ import com.hsleiden.todoapp.model.Task;
 
 public class NewTaskActivity extends AppCompatActivity {
 
+    /* New task activity is a simple form-based menu that allows a user to fill the wanted
+    * fields of his new task. The task will then be displayed in the MainActivity and stored on
+    * the Firebase backend.*/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
 
-        DatabaseReference reference = Utils.getDatabase().getReference();
+            DatabaseReference reference = Utils.getDatabase().getReference();
 
         final NumberPicker taskPriorityPicker = findViewById(R.id.taskNumberPicker);
         taskPriorityPicker.setMinValue(1);
@@ -37,16 +41,12 @@ public class NewTaskActivity extends AppCompatActivity {
         taskDatePicker.setMinDate(System.currentTimeMillis()); // Ensures data is in future.
 
         final Intent intent = new Intent(this, MainActivity.class);
-
         final AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
-
         button.setOnClickListener(view -> {
             view.startAnimation(buttonClick);
             if(taskNameField.getText().length() == 0){
                 taskNameField.setError(getString(R.string.task_name_error));
             } else {
-                // todo newTask.getTaskName should be a unique identifier of some kind.
-
                 reference.child("tasks").child(taskNameField.getText().toString()).setValue(
                         new Task(
                         taskNameField.getText().toString(),

@@ -19,9 +19,12 @@ import com.hsleiden.todoapp.model.Task;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/* EditTaskActivity is called with the string extra which passed by the user-selected
+* task. This string extra is then used to call back to the Firebase back end to modify
+* the attributes of the task. */
+
 public class EditTaskActivity extends AppCompatActivity {
     Task task = new Task();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

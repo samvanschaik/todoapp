@@ -36,7 +36,8 @@ enum SortedState{PRIORITY, DATE, NONE}
 public class MainActivity extends AppCompatActivity
         implements TaskRecyclerViewAdapter.ItemClickListener {
     public TaskRecyclerViewAdapter adapter;
-    private static DatabaseReference reference = Utils.getDatabase().getReference().child("tasks");
+    private static DatabaseReference reference =
+            Utils.getDatabase().getReference().child("tasks");
     private SortedState sortedState = NONE;
     private ArrayList<Task> tasks = new ArrayList<>();
 
@@ -168,7 +169,7 @@ public class MainActivity extends AppCompatActivity
         adapter.notifyDataSetChanged();
     }
 
-    /* Opens the Edit Task screen when a user clicks on a task. */
+    /* Opens the Edit Task screen when a user clicks on a task. Uses parameter passing.*/
     @Override
     public void onItemClick(View view, int position) {
         Intent myIntent = new Intent(this, EditTaskActivity.class);

@@ -8,7 +8,7 @@ public class Utils {
     public static FirebaseDatabase getDatabase(){
         if(database == null){
             database = FirebaseDatabase.getInstance();
-            database.setPersistenceEnabled(true);
+            database.setPersistenceEnabled(true); // Allows offline persistence.
         }
         return database;
     }
